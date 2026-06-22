@@ -46,14 +46,14 @@ const login = async (req, res, next) => {
 
     const isMatch = await user.matchPassword(password);
     if (!isMatch) {
-      return res.status(401).json({ success: false, message: "Invalid email or password." });
+      return res.status(401).json({ success: false, message: "Invalid email or password..🛑🛑🛑🛑" });
     }
 
     if (!user.isActive) {
-      return res.status(403).json({ success: false, message: "Your account has been deactivated." });
+      return res.status(403).json({ success: false, message: "Your account has been deactivated.⛔⛔⛔" });
     }
 
-    sendTokenResponse(user, 200, res, "Login successful!");
+    sendTokenResponse(user, 200, res, "Login successful✅✅✅");
   } catch (error) {
     next(error);
   }
