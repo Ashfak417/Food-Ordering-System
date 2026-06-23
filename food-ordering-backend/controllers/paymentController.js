@@ -1,5 +1,5 @@
 const md5 = require("md5");
-const Order = require("../models/Order");
+const Order = require("c:/Users/ASUS/Downloads/food-ordering-backend-v3/food-ordering-backend/models/Order");
 
 // Generate PayHere hash
 // hash = md5(merchant_id + order_id + amount + currency + md5(merchant_secret).toUpperCase()).toUpperCase()

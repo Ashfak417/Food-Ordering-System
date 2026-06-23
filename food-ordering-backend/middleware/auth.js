@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+const User = require("c:/Users/ASUS/Downloads/food-ordering-backend-v3/food-ordering-backend/models/User");
 
 // Protect routes - verify JWT token
 const protect = async (req, res, next) => {

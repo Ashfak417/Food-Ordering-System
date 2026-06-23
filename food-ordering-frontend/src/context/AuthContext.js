@@ -1,5 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { authAPI } from '../services/api';
+import React, { createContext, useContext, useState } from 'react';
 
 const AuthContext = createContext(null);
 
@@ -7,24 +6,14 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
     try { return JSON.parse(localStorage.getItem('user')); } catch { return null; }
   });
-  const [loading, setLoading] = useState(false);
 
-  const login = async (email, password) => {
-    const res = await authAPI.login({ email, password });
-    const { token, user } = res.data;
-    localStorage.setItem('token', token);
-    localStorage.setItem('user', JSON.stringify(user));
-    setUser(user);
-    return user;
-  };
-
-  const register = async (data) => {
-    const res = await authAPI.register(data);
-    const { token, user } = res.data;
-    localStorage.setItem('token', token);
-    localStorage.setItem('user', JSON.stringify(user));
-    setUser(user);
-    return user;
+  // Called after OTP verification sets localStorage directly
+  // This syncs the context state from localStorage
+  const syncUser = () => {
+    try {
+      const stored = JSON.parse(localStorage.getItem('user'));
+      setUser(stored);
+    } catch {}
   };
 
   const logout = () => {
@@ -39,8 +28,19 @@ export const AuthProvider = ({ children }) => {
     setUser(merged);
   };
 
+  // Also expose a simple setter for pages that handle their own token/user storage
+  const setUserFromStorage = () => {
+    try {
+      const stored = JSON.parse(localStorage.getItem('user'));
+      if (stored) setUser(stored);
+    } catch {}
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, updateUser, isAdmin: user?.role === 'admin' }}>
+    <AuthContext.Provider value={{
+      user, logout, updateUser, setUserFromStorage,
+      isAdmin: user?.role === 'admin'
+    }}>
       {children}
     </AuthContext.Provider>
   );
